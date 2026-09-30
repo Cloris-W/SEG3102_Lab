@@ -1,8 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject, OnDestroy, OnInit} from '@angular/core';
 import { AddressEntry } from '../address-entry';
+import {NotificationService} from '../notification-service';
+import {Subscription} from 'rxjs';
 import {NgClass} from "@angular/common";
 
-  @Component({
+@Component({
   selector: 'app-address-list-element',
   imports: [
     NgClass
@@ -10,13 +12,21 @@ import {NgClass} from "@angular/common";
   templateUrl: './address-list-element.html',
   styleUrl: './address-list-element.css'
 })
-
-export class AddressListElement {
-  selected = false;
-
+export class AddressListElement implements OnInit, OnDestroy {
   @Input({ required: true }) address!: AddressEntry;
+  selected = false;
+  subscription: Subscription | undefined;
+  notificationService= inject(NotificationService);
 
+  ngOnInit(): void {
+    this.subscription = this.notificationService.selectedElement.subscribe(newAddress => {
+      this.selected = newAddress === this.address;
+    });
+  }
   getFullName(): string {
     return `${this.address.firstName}, ${this.address.lastName}`;
-  } 
+  }
+  ngOnDestroy(): void {
+    this.subscription!.unsubscribe();
+  }
 }
