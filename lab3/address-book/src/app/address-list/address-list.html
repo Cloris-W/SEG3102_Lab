@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-12">
+    <button class="btn btn-success" (click)="addAddress()">New Address</button>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="address-list col-md-3">
+    @for (address of addresses; track $index) {
+      <app-address-list-element
+        [address]="address"
+        (click)="select(address)">
+        </app-address-list-element>
+      }
+  </div>
+  <div class="col-md-9">
+    @if (currentAddress !== null) {
+      <app-address-view
+        [address]="currentAddress"
+        (fireDelete)="deleteCurrent()">
+      </app-address-view>
+    }
+  </div>
+</div>
