@@ -19,6 +19,12 @@ export class ShoppingList {
   notificationService = inject(NotificationService);
 
   select(product: ShoppingEntry): void {
+    if (this.currentProduct === product) {
+      this.currentProduct = null;
+      this.notificationService.clearSelection();
+      return;
+    }
+
     this.currentProduct = product;
     this.notificationService.selectElement(product);
   }
@@ -45,6 +51,7 @@ export class ShoppingList {
     this.products = this.products.filter(product => product !== productToDelete);
     if (this.currentProduct === productToDelete) {
       this.currentProduct = null;
+      this.notificationService.clearSelection();
     }
   }
 }

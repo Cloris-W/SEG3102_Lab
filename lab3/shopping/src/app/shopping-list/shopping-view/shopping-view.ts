@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ShoppingEntry} from '../shopping-entry';
 import { FormsModule } from '@angular/forms';
 
@@ -8,17 +8,27 @@ import { FormsModule } from '@angular/forms';
     styleUrls: ['./shopping-view.css'],
     imports: [FormsModule]
 })
-export class ShoppingView implements OnInit {
-  @Input() shopping!: ShoppingEntry;
-  @Output() fireDelete: EventEmitter<ShoppingEntry> = new EventEmitter();
-  edit: boolean | undefined;
+export class ShoppingView {
+  private currentShopping!: ShoppingEntry;
+  productName = '';
 
-  ngOnInit(): void {
-    this.edit = true;
+  @Input({ required: true })
+  set shopping(product: ShoppingEntry) {
+    this.currentShopping = product;
+    this.productName = product.productName;
   }
 
-  toggleEdit(): void {
-    this.edit = !this.edit;
+  get shopping(): ShoppingEntry {
+    return this.currentShopping;
+  }
+
+  @Output() fireDelete: EventEmitter<ShoppingEntry> = new EventEmitter();
+
+  update(): void {
+    const updatedName = this.productName.trim();
+    if (updatedName) {
+      this.shopping.productName = updatedName;
+    }
   }
 
   delete(): void {

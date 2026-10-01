@@ -11,4 +11,8 @@ export class NotificationService {
   public selectElement(product: ShoppingEntry): void {
     this.selectedElement.next(product);
   }
+
+  public clearSelection(): void {
+    this.selectedElement.next(null);
+  }
 }
