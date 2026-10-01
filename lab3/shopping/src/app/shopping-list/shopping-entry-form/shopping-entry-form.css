@@ -1,0 +1,10 @@
+.product-entry {
+  align-items: end;
+  display: flex;
+  gap: 0.75rem;
+  max-width: 420px;
+}
+
+.product-entry input {
+  flex: 1;
+}

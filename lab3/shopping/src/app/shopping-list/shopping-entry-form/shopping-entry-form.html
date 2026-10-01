@@ -1,0 +1,11 @@
+<form class="product-entry" (ngSubmit)="submit()">
+  <label for="newProductName" class="form-label">Product Name</label>
+  <input
+    class="form-control"
+    id="newProductName"
+    name="newProductName"
+    [(ngModel)]="productName"
+    placeholder="e.g. broccoli"
+    required>
+  <button class="btn btn-success" type="submit">Add</button>
+</form>

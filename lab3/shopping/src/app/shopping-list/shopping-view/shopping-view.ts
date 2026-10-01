@@ -23,11 +23,13 @@ export class ShoppingView {
   }
 
   @Output() fireDelete: EventEmitter<ShoppingEntry> = new EventEmitter();
+  @Output() updated = new EventEmitter<ShoppingEntry>();
 
   update(): void {
     const updatedName = this.productName.trim();
     if (updatedName) {
       this.shopping.productName = updatedName;
+      this.updated.emit(this.shopping);
     }
   }
 

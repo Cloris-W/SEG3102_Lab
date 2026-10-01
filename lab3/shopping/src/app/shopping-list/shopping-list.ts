@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { ShoppingEntry } from './shopping-entry';
+import { ShoppingEntryForm } from './shopping-entry-form/shopping-entry-form';
 import { ShoppingListElement } from './shopping-list-element/shopping-list-element';
 import { ShoppingView } from './shopping-view/shopping-view';
 import { NotificationService } from './notification-service';
 
 @Component({
   selector: 'app-shopping-list',
-  imports: [FormsModule, ShoppingListElement, ShoppingView],
+  imports: [ShoppingEntryForm, ShoppingListElement, ShoppingView],
   templateUrl: './shopping-list.html',
   styleUrl: './shopping-list.css',
   providers: [NotificationService],
@@ -15,7 +15,6 @@ import { NotificationService } from './notification-service';
 export class ShoppingList {
   products: ShoppingEntry[] = [];
   currentProduct: ShoppingEntry | null = null;
-  newProductName = '';
   notificationService = inject(NotificationService);
 
   select(product: ShoppingEntry): void {
@@ -29,16 +28,15 @@ export class ShoppingList {
     this.notificationService.selectElement(product);
   }
 
-  addProduct(): void {
-    const productName = this.newProductName.trim();
-    if (!productName) {
+  addProduct(productName: string): void {
+    const trimmedProductName = productName.trim();
+    if (!trimmedProductName) {
       return;
     }
 
-    const newProduct = new ShoppingEntry(productName);
+    const newProduct = new ShoppingEntry(trimmedProductName);
     this.products = [newProduct, ...this.products];
     this.select(newProduct);
-    this.newProductName = '';
   }
 
   deleteCurrent(): void {
@@ -52,6 +50,18 @@ export class ShoppingList {
     if (this.currentProduct === productToDelete) {
       this.currentProduct = null;
       this.notificationService.clearSelection();
+    }
+  }
+
+  updateProduct(updatedProduct: ShoppingEntry): void {
+    const replacement = new ShoppingEntry(updatedProduct.productName);
+    this.products = this.products.map(product =>
+      product === updatedProduct ? replacement : product
+    );
+
+    if (this.currentProduct === updatedProduct) {
+      this.currentProduct = replacement;
+      this.notificationService.selectElement(replacement);
     }
   }
 }
