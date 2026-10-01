@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject, OnDestroy, OnInit} from '@angular/core';
 import { ShoppingEntry } from '../shopping-entry';
+import {NotificationService} from '../notification-service';
+import {Subscription} from 'rxjs';
 import {NgClass} from "@angular/common";
 
 @Component({
@@ -10,13 +12,21 @@ import {NgClass} from "@angular/common";
   templateUrl: './shopping-list-element.html',
   styleUrl: './shopping-list-element.css'
 })
-
-export class ShoppingListElement {
+export class ShoppingListElement implements OnInit, OnDestroy {
+  @Input({ required: true }) shopping!: ShoppingEntry;
   selected = false;
-  @Input({ required: true }) product!: ShoppingEntry;
+  subscription: Subscription | undefined;
+  notificationService= inject(NotificationService);
 
+  ngOnInit(): void {
+    this.subscription = this.notificationService.selectedElement.subscribe(newshopping => {
+      this.selected = newshopping === this.shopping;
+    });
+  }
   getFullName(): string {
-    return `${this.product.productName}`;
+    return `${this.shopping.productName}`;
+  }
+  ngOnDestroy(): void {
+    this.subscription!.unsubscribe();
   }
 }
-

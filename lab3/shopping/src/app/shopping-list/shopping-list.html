@@ -1,3 +1,4 @@
+
 <div class="row">
   <div class="col-md-12">
     <button class="btn btn-success" (click)="addProduct()">New Product</button>
@@ -8,7 +9,7 @@
   <div class="address-list col-md-3">
     @for (product of products; track $index) {
       <app-shopping-list-element
-        [product]="product"
+        [shopping]="product"
         (click)="select(product)">
         </app-shopping-list-element>
       }
@@ -16,7 +17,7 @@
   <div class="col-md-9">
     @if (currentProduct !== null) {
       <app-shopping-view
-        [product]="currentProduct"
+        [shopping]="currentProduct"
         (fireDelete)="deleteCurrent()">
       </app-shopping-view>
     }
