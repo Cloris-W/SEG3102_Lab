@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ShoppingView } from './shopping-view';
+import { ShoppingEntry } from '../shopping-entry';
 
 describe('ShoppingView', () => {
   let component: ShoppingView;
@@ -12,7 +13,8 @@ describe('ShoppingView', () => {
 
     fixture = TestBed.createComponent(ShoppingView);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.componentRef.setInput('shopping', new ShoppingEntry('broccoli'));
+    fixture.detectChanges();
   });
 
   it('should create', () => {

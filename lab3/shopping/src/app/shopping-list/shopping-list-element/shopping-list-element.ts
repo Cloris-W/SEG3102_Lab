@@ -1,4 +1,4 @@
-import { Component, Input, inject, OnDestroy, OnInit} from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, OnDestroy, OnInit} from '@angular/core';
 import { ShoppingEntry } from '../shopping-entry';
 import {NotificationService} from '../notification-service';
 import {Subscription} from 'rxjs';
@@ -14,6 +14,7 @@ import {NgClass} from "@angular/common";
 })
 export class ShoppingListElement implements OnInit, OnDestroy {
   @Input({ required: true }) shopping!: ShoppingEntry;
+  @Output() remove = new EventEmitter<ShoppingEntry>();
   selected = false;
   subscription: Subscription | undefined;
   notificationService= inject(NotificationService);
@@ -26,6 +27,12 @@ export class ShoppingListElement implements OnInit, OnDestroy {
   getFullName(): string {
     return `${this.shopping.productName}`;
   }
+
+  delete(event: MouseEvent): void {
+    event.stopPropagation();
+    this.remove.emit(this.shopping);
+  }
+
   ngOnDestroy(): void {
     this.subscription!.unsubscribe();
   }
