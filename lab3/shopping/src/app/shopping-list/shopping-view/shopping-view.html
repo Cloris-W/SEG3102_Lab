@@ -1,0 +1,17 @@
+<form class="ui large form segment">
+  <h3 class="ui header">Product Details</h3>
+  <fieldset [disabled]="!edit ? 'disabled' : null">
+    <div class="form-group">
+      <label for="productName">Product Name</label>
+      <input class="form-control" name="productName" id="productName" [(ngModel)]="shopping.productName" required>
+    </div>
+  </fieldset>
+  <div class="btn-toolbar" role="toolbar">
+    <button class="btn btn-danger" name="delete" (click)="delete()">Delete</button>
+    @if (edit) {
+      <button (click)="toggleEdit()" class="btn btn-secondary m-auto">Protect</button>
+    } @else {
+      <button (click)="toggleEdit()" class="btn btn-secondary m-auto">Edit</button>
+    }
+  </div>
+</form>
