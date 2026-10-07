@@ -1,1 +1,67 @@
-<p>user-form works!</p>
+<div class="container">
+  <h1>User Information Form</h1>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input
+        id="firstName"
+        type="text"
+        class="form-control"
+        formControlName="firstName"
+      />
+
+      @if (firstName.touched && firstName.hasError('required')) {
+        <div class="error-message">First Name is required.</div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input
+        id="lastName"
+        type="text"
+        class="form-control"
+        formControlName="lastName"
+      />
+
+      @if (lastName.touched && lastName.hasError('required')) {
+        <div class="error-message">Last Name is required.</div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number</label>
+      <input
+        id="phoneNumber"
+        type="text"
+        class="form-control"
+        formControlName="phoneNumber"
+      />
+
+      @if (phoneNumber.touched && phoneNumber.hasError('invalidPhoneNumber')) {
+        <div class="error-message">
+          Phone Number must be 10 digits long, with the first and fourth digits different from 0
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        class="form-control"
+        formControlName="email"
+      />
+
+      @if (email.touched && email.hasError('email')) {
+        <div class="error-message">Please enter a valid email address.</div>
+      }
+    </div>
+
+    <button type="submit" [disabled]="userForm.invalid">
+      Submit
+    </button>
+  </form>
+</div>
