@@ -1,1 +1,30 @@
-<p>user-summary works!</p>
+<div class="container">
+  <h1>Submitted User Information</h1>
+
+  @if (userData) {
+    <table>
+      <tbody>
+        <tr>
+          <th>First Name</th>
+          <td>{{ userData.firstName }}</td>
+        </tr>
+        <tr>
+          <th>Last Name</th>
+          <td>{{ userData.lastName }}</td>
+        </tr>
+        <tr>
+          <th>Phone Number</th>
+          <td>{{ userData.phoneNumber || 'Not provided' }}</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>{{ userData.email || 'Not provided' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  } @else {
+    <p>No submitted user information is available.</p>
+  }
+
+  <a routerLink="/user-form">Back to the form</a>
+</div>

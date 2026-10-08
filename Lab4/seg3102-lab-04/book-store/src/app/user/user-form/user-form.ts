@@ -65,6 +65,6 @@ export class UserForm {
     }
 
     this.userDataService.setUserData(this.userForm.getRawValue());
-    this.router.navigate(['/summary']);
+    this.router.navigate(['/user-summary']);
   }
 }
