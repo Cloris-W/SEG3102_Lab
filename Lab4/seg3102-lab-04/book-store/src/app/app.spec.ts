@@ -24,6 +24,6 @@ describe('App', () => {
     const links = Array.from(compiled.querySelectorAll('.nav-link a')).map((a) =>
       a.textContent?.trim(),
     );
-    expect(links).toEqual(['Home', 'About Us', 'Contact Us', 'Books', 'Login', 'Admin']);
+    expect(links).toEqual(['Home', 'About Us', 'Contact Us', 'Books', 'Login', 'Admin', 'User form']);
   });
 });
