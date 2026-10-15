@@ -1,11 +1,10 @@
 import { Routes } from '@angular/router';
-import { AddressList } from './address-list/address-list';
-import { AddressTable } from './address-list/address-table/address-table';
+import {AuthGuard} from "@angular/fire/auth-guard";
 
 export const routes: Routes = [
-  { path: 'addresses', component: AddressList },
-  { path: 'contact', component: AddressTable },
-  { path: 'address-list', children: [] },
-  { path: '', redirectTo: 'addresses', pathMatch: 'full' },
-  { path: '**', component: AddressList },
+  { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
+  { path: 'sign-in', component: SignIn },
+  { path: 'sign-up', component: SignUp },
+  { path: 'address-list', component: AddressList, canActivate: [AuthGuard] },
+  { path: 'password-forgot', component: PasswordForgot }
 ];
