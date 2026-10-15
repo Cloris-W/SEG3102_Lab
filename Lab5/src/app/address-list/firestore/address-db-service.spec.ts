@@ -1,18 +1,27 @@
 import { TestBed } from '@angular/core/testing';
-import { Firestore } from '@angular/fire/firestore';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../authentication/auth-service';
 import { AddressDbService } from './address-db-service';
 
 describe('AddressDbService', () => {
   let service: AddressDbService;
 
   beforeEach(() => {
-    // This creation test does not call Firestore or access the live database.
     TestBed.configureTestingModule({
-      providers: [{ provide: Firestore, useValue: {} }],
+      providers: [
+        provideFirebaseApp(() => initializeApp(environment.firebase)),
+        provideAuth(() => getAuth()),
+        provideFirestore(() => getFirestore()),
+        AuthService
+      ]
     });
+
     service = TestBed.inject(AddressDbService);
   });
-
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
