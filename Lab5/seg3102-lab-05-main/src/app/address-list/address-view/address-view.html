@@ -1,0 +1,48 @@
+<form class="ui large form segment" [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+    <h3 class="ui header">Address Details</h3>
+    <fieldset [disabled]="!edit ? 'disabled': null">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input class="form-control" id="firstName" formControlName="firstName">
+            @if (showError(firstName)) {
+                <div class="alert alert-danger">First Name is required.</div>
+            }
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input class="form-control" id="lastName" formControlName="lastName">
+            @if (showError(lastName)) {
+                <div class="alert alert-danger">Last Name is required.</div>
+            }
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input class="form-control" id="email" formControlName="email">
+            @if (showError(email)) {
+                <div class="alert alert-danger">Email must be a valid email address.</div>
+            }
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input class="form-control" id="phone" formControlName="phone">
+            @if (showError(phone)) {
+                <div class="alert alert-danger">
+                    Phone Number must be 10 digits long with the first and fourth digits different from 0.
+                </div>
+            }
+        </div>
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <input class="form-control" id="notes" formControlName="notes">
+        </div>
+    </fieldset>
+    <div class="btn-toolbar address-view-btns" role="toolbar">
+        <button type="button" class="btn btn-danger" name="delete" (click)="delete()">Delete</button>
+            @if (edit) {
+                <button type="button" (click)="toggleEdit()" class="btn btn-secondary m-auto">Protect</button>
+            } @else {
+                <button type="button" (click)="toggleEdit()" class="btn btn-secondary m-auto">Edit</button>
+            }
+        <button type="submit" class="btn btn-success">Submit</button>
+    </div>
+</form>
