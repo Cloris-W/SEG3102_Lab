@@ -1,26 +1,28 @@
-<h3>Contact Details</h3>
-@if (address) {
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Phone Number</th>
-                <th>Email</th>
-                <th>Notes</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ address.firstName }}</td>
-                <td>{{ address.lastName }}</td>
-                <td>{{ address.phone }}</td>
-                <td>{{ address.email }}</td>
-                <td>{{ address.notes }}</td>
-            </tr>
-        </tbody>
-    </table>
-} @else {
-    <p>No contact has been submitted yet.</p>
+<h3>Address List</h3>
+@if (addresses$ | async; as addresses) {
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Phone Number</th>
+        <th>Email</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (address of addresses; track address.id) {
+        <tr>
+          <td>{{ address.firstName }}</td>
+          <td>{{ address.lastName }}</td>
+          <td>{{ address.phone }}</td>
+          <td>{{ address.email }}</td>
+          <td>{{ address.notes }}</td>
+        </tr>
+      } @empty {
+        <tr><td colspan="5">No saved addresses yet.</td></tr>
+      }
+    </tbody>
+  </table>
 }
-<button class="btn btn-success" (click)="addContact()">Add a new contact</button>
+<button type="button" class="btn btn-secondary" routerLink="/address-list">Back to Address Book</button>

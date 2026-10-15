@@ -5,6 +5,7 @@ import {AddressListElement} from "./address-list-element/address-list-element";
 import {AddressView} from "./address-view/address-view";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {AddressDbService} from "./firestore/address-db-service";
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-address-list',
@@ -14,7 +15,8 @@ import {AddressDbService} from "./firestore/address-db-service";
     AddressView,
     NgForOf,
     NgIf,
-    NgStyle
+    NgStyle,
+    RouterLink
   ],
   templateUrl: './address-list.html',
   styleUrl: './address-list.css',
