@@ -1,27 +1,28 @@
-<div class = "row">
-    <div class="col-md-12">
-        <button class="btn btn-success" (click)="addAdress()">New Address </button>
-        <button class="btn btn-secondary ms-2" [routerLink]="['/address-list']">Address List</button>
-    </div>
-<hr>
 <div class="row">
-    <div class="address-list col-md-3">
-        @if (showAddresses) {
-            @for (address of addresses; track $index) {
-                <app-address-list-element
-                    [address]="address"
-                    (click)="select(address)">
-                </app-address-list-element>
-            }
-        }
-    </div>
-<div>
-    <div class="col-md-9">
-        @if (currentAddress !== null) {
-            <app-address-view
-            [address] = "currentAddress"
-            (fireDelete)="deleteCurrent()">
-            </app-address-view>
-        }
-    </div>
+  <div class="col-md-12">
+    <button class="btn btn-success" (click)="addAddress()">New Address</button>
+  </div>
+  <div class="col-md-8" [ngStyle]="msgStyle" [hidden]="hideMsg">
+    {{message}}
+  </div>
 </div>
+<hr>
+  <div class="row">
+      <div class="address-list col-md-3">
+        @for (address of addresses; track $index) {
+          <app-address-list-element
+            [address]="address"
+            (click)='select(address)'
+            >
+          </app-address-list-element>
+        }
+      </div>
+    <div class="col-md-9">
+      @if (currentAddress !== null) {
+        <app-address-view
+          [address]="currentAddress"
+          (fireDelete)='deleteCurrent()'
+        (fireSave)='saveCurrent()'></app-address-view>
+      }
+    </div>
+  </div>

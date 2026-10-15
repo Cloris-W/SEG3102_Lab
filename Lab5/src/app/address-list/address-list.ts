@@ -1,40 +1,108 @@
-import { Component, inject } from '@angular/core';
-import { AddressEntry } from './address-entry';
-import { AddressListElement } from './address-list-element/address-list-element';
-import { AddressView } from './address-view/address-view';
-import { NotificationService } from './notification-service';
-import { RouterLink } from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {AddressEntry} from "./address-entry";
+import {NotificationService} from "./notification-service";
+import {AddressListElement} from "./address-list-element/address-list-element";
+import {AddressView} from "./address-view/address-view";
+import {NgForOf, NgIf, NgStyle} from "@angular/common";
+import {AddressDbService} from "./firestore/address-db-service";
 
 @Component({
   selector: 'app-address-list',
-  imports: [AddressListElement, AddressView, RouterLink],
+  standalone: true,
+  imports: [
+    AddressListElement,
+    AddressView,
+    NgForOf,
+    NgIf,
+    NgStyle
+  ],
   templateUrl: './address-list.html',
   styleUrl: './address-list.css',
+  providers: [NotificationService]
 })
-export class AddressList {
-  showAddresses = false;
-  notificationService: NotificationService = inject(NotificationService);
+export class AddressList implements OnInit {
+  addresses: AddressEntry[] = [];
+  currentAddress: AddressEntry | null = null;
+  message: string = '';
+  hideMsg = true;
+  msgStyle = {
+    color: '',
+    'background-color': 'white',
+    'font-size': '150%',
+  };
+  private notificationService: NotificationService = inject(NotificationService);
+  private store: AddressDbService = inject(AddressDbService);
 
-  get addresses(): AddressEntry[] {
-    return this.notificationService.addresses;
-  }
-
-  get currentAddress(): AddressEntry | null {
-    return this.notificationService.selectedElement.value;
+  ngOnInit(): void {
+    this.message = '';
+    this.store.getAddresses().subscribe(data => {
+      this.addresses = data.map(e => {
+        return {
+          id: e.id,
+          ...e
+        } as AddressEntry;
+      });
+    });
   }
 
   select(address: AddressEntry): void {
+    this.currentAddress = address;
     this.notificationService.selectionChanged(address);
   }
 
-  addAdress(): void{
-    this.notificationService.addAddress();
+  showMessage(type: string, msg: string): void {
+    this.msgStyle.color = type === 'error' ? 'red' : 'blue';
+    this.message = msg;
+    this.hideMsg = false;
+    setTimeout(
+      () => {
+        this.hideMsg = true;
+      }, 2500
+    );
+  }
+
+  addAddress(): void {
+    const newAddress = new AddressEntry('New', 'Entry');
+    this.addresses = [newAddress, ...this.addresses];
+    this.select(newAddress);
   }
 
   deleteCurrent(): void {
-    this.notificationService.addresses = this.addresses.filter((address: AddressEntry) => address !== this.currentAddress );
-    this.notificationService.selectionChanged(null);
+    if (this.currentAddress && this.currentAddress.id !== null) {
+      this.addresses =
+        this.addresses.filter((address: AddressEntry) => address !== this.currentAddress);
+      // **** permanently delete
+      this.store.deleteAddress(this.currentAddress.id!)
+        .then(_ =>
+          this.showMessage('info', 'The address entry was successfully deleted')
+        )
+        .catch(_ =>
+          this.showMessage('error', 'Error unable to delete the address entry')
+        );
+      this.currentAddress = null;
+    }
   }
 
-
+  saveCurrent(): void {
+    if (this.currentAddress && this.currentAddress.id === null) {
+      this.store.createAddress(this.currentAddress)
+        .then(
+          (docRef: any) => {
+            this.currentAddress!.id = docRef.id;
+            this.showMessage('info', 'The address entry was successfully saved');
+          }
+        )
+        .catch((_: any) =>
+          this.showMessage('error', 'Error unable to save the address entry')
+        );
+    } else {
+      this.store.updateAddress(this.currentAddress!)
+        .then((_: any) =>
+          this.showMessage('info', 'The address entry was successfully updated')
+        )
+        .catch((_: any) =>
+          this.showMessage('error', 'Error unable to update the address entry')
+        );
+    }
+  }
 }

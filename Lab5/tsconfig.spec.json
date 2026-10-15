@@ -7,4 +7,5 @@
     "types": ["vitest/globals", "@angular/localize"]
   },
   "include": ["src/**/*.d.ts", "src/**/*.spec.ts"]
+
 }
