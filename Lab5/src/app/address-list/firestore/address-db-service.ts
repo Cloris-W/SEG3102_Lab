@@ -28,7 +28,7 @@ export class AddressDbService {
     const addresses = collection(this.firestore, 'abooks', this.authService.userid, 'addresses');
     delete address.id;
     // @ts-ignore
-    return addDoc(addresses, address);
+    return addDoc(addresses, { ...address });
   }
 
   updateAddress(address: AddressEntry) {
@@ -37,7 +37,7 @@ export class AddressDbService {
     const addresses = collection(this.firestore, 'abooks', this.authService.userid, 'addresses');
     const addressRef = doc(addresses, addressId!);
     // @ts-ignore
-    return setDoc(addressRef, address);
+    return setDoc(addressRef, { ...address });
   }
 
   deleteAddress(addressId: string): Promise<void> {
