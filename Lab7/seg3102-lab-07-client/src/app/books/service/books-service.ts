@@ -6,6 +6,10 @@ import {map} from 'rxjs/operators';
 
 const Url = 'http://localhost:8080/books-api/';
 
+export interface AuthorDetails extends AuthorEntity {
+  books: { title: string }[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +18,10 @@ export class BooksService {
 
   public getBook(id: string): Observable<BookEntity> {
     return this.http.get<BookEntity>(Url + 'books/' + id);
+  }
+
+  public getAuthor(id: string): Observable<AuthorDetails> {
+    return this.http.get<AuthorDetails>(Url + 'authors/' + encodeURIComponent(id));
   }
 
   public addBook(book: BookEntity): Observable<BookEntity> {

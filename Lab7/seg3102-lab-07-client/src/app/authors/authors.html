@@ -1,0 +1,31 @@
+<h2>Authors</h2>
+<form [formGroup]="form" (ngSubmit)="search()" class="mb-3">
+  <label for="author-id" class="form-label">Author ID</label>
+  <div class="input-group">
+    <input id="author-id" type="text" inputmode="numeric" formControlName="id" class="form-control">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+<div aria-live="polite">
+  @if (loading()) {
+    <p>Searching for author…</p>
+  }
+  @if (message()) {
+    <p class="alert alert-warning">{{ message() }}</p>
+  }
+  @if (author(); as result) {
+    <h3>{{ result.firstName }} {{ result.lastName }}</h3>
+    <p>Author ID: {{ result.id }}</p>
+    <h4>Books</h4>
+    @if (result.books.length) {
+      <ul>
+        @for (book of result.books; track $index) {
+          <li>{{ book.title }}</li>
+        }
+      </ul>
+    } @else {
+      <p>No books are listed for this author.</p>
+    }
+  }
+</div>
