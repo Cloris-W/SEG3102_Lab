@@ -28,6 +28,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-hateoas-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testRuntimeOnly("org.springdoc:springdoc-openapi-starter-webmvc-ui")
 }
 
 kotlin {
