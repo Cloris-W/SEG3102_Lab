@@ -23,6 +23,7 @@ class WebSecurityConfig {
     @Throws(Exception::class)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .httpBasic(Customizer.withDefaults())
             .authorizeHttpRequests { auth -> auth.anyRequest().authenticated() }
             .formLogin {formLogin -> formLogin.loginPage("/login").permitAll() }
             .logout(Customizer.withDefaults())
@@ -35,7 +36,15 @@ class WebSecurityConfig {
             .password(passwordEncoder().encode("userpassword"))
             .roles("USER")
             .build()
-        return InMemoryUserDetailsManager(user)
+        val user1: UserDetails = User.withUsername("user1")
+            .password(passwordEncoder().encode("pass1"))
+            .roles("USER")
+            .build()
+        val user2: UserDetails = User.withUsername("user2")
+            .password(passwordEncoder().encode("pass2"))
+            .roles("USER")
+            .build()
+        return InMemoryUserDetailsManager(user, user1, user2)
     }
 
     @Bean
